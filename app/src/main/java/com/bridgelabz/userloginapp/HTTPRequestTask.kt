@@ -8,17 +8,51 @@ import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
-class HTTPRequestTask : AsyncTask<Void, Void, Void>() {
+class HTTPRequestTask(private val userLogin: UserLogin) : AsyncTask<Void, Void, Void>() {
 
     private var urlConnection: HttpURLConnection? = null
     private val tag = "LoginActivity"
 
     override fun doInBackground(vararg params: Void?): Void? {
 
-        try {
+        performGETUsers()
+        performPOSTUserLogin()
+        return null
+    }
 
-            performGETUsers()
-            performPOSTUserLogin()
+    private fun performPOSTUserLogin() {
+        try {
+            val postData = getUserLoginPostData(userLogin)
+
+            val urlAddress =
+                "http://fundoonotes.incubation.bridgelabz.com/api/user/login"
+            urlConnection = getUrlConnection(urlAddress)
+            urlConnection!!.setRequestProperty("Content-Type", "application/json")
+            urlConnection!!.requestMethod = "POST"
+            urlConnection!!.doOutput = true
+            urlConnection!!.doInput = true
+            urlConnection!!.setChunkedStreamingMode(0)
+
+            val outputStream = BufferedOutputStream(urlConnection!!.outputStream)
+            val writer = BufferedWriter(OutputStreamWriter(outputStream, "UTF-8"))
+            writer.write(postData.toString())
+            writer.flush()
+
+            getHttpResponse(urlConnection!!)
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+        } finally {
+            if (urlConnection != null)
+                urlConnection!!.disconnect()
+        }
+    }
+
+    private fun performGETUsers() {
+        try {
+            val urlAddress = "http://fundoonotes.incubation.bridgelabz.com/api/user"
+
+            urlConnection = getUrlConnection(urlAddress)
+            getHttpResponse(urlConnection!!)
 
         } catch (exception: Exception) {
             exception.printStackTrace()
@@ -26,33 +60,6 @@ class HTTPRequestTask : AsyncTask<Void, Void, Void>() {
             if (urlConnection != null)
                 urlConnection!!.disconnect()
         }
-        return null
-    }
-
-    private fun performPOSTUserLogin() {
-
-        val postData = JsonObject()
-        postData.addProperty("email", "ksoundarya4@gmail.com")
-        postData.addProperty("password", "sound7")
-
-        val urlAddress = "http://fundoonotes.incubation.bridgelabz.com/api/user/login"
-        urlConnection = getUrlConnection(urlAddress)
-
-        val outputStream = BufferedOutputStream(urlConnection!!.outputStream)
-        val writer = BufferedWriter(OutputStreamWriter(outputStream, "UTF-8"))
-        writer.write(postData.toString())
-        writer.flush()
-
-        getHttpResponse(urlConnection!!)
-    }
-
-    private fun performGETUsers() {
-
-        val urlAddress = "http://fundoonotes.incubation.bridgelabz.com/api/user"
-
-        urlConnection = getUrlConnection(urlAddress)
-
-        getHttpResponse(urlConnection!!)
     }
 
     private fun getHttpResponse(urlConnection: HttpURLConnection) {
@@ -74,5 +81,12 @@ class HTTPRequestTask : AsyncTask<Void, Void, Void>() {
     private fun getUrlConnection(urlAddress: String): HttpURLConnection {
         val url = URL(urlAddress)
         return url.openConnection() as HttpURLConnection
+    }
+
+    private fun getUserLoginPostData(userLogin: UserLogin): JsonObject {
+        val postData = JsonObject()
+        postData.addProperty("email", userLogin.email)
+        postData.addProperty("password", userLogin.password)
+        return postData
     }
 }
