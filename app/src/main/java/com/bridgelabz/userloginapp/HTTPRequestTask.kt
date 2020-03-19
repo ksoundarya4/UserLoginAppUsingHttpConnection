@@ -18,7 +18,7 @@ class HTTPRequestTask : AsyncTask<Void, Void, Void>() {
 
         try {
             val url =
-                URL("http://fundoonotes.incubation.bridgelabz.com/api/user?access_token=faUiQVguZu67f4ChfyOVOpfCUNr4lF8jeBTyZjGeNsOGRb8N32KD97QjB1IMXLhL")
+                URL("http://fundoonotes.incubation.bridgelabz.com/api/user/5e71aee0ad53b700227c5905?access_token=faUiQVguZu67f4ChfyOVOpfCUNr4lF8jeBTyZjGeNsOGRb8N32KD97QjB1IMXLhL")
             urlConnection = url.openConnection() as HttpURLConnection
 //            urlConnection!!.addRequestProperty("id", "5e71aee0ad53b700227c5905")
             val responseCode = urlConnection!!.responseCode
