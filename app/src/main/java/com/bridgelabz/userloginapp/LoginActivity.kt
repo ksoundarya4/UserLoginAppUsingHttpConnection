@@ -24,6 +24,7 @@ class LoginActivity : AppCompatActivity() {
         findViewById<Button>(R.id.button_register)
     }
 
+    private lateinit var httpRequestCall: HTTPRequestTask
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -41,6 +42,8 @@ class LoginActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
+            httpRequestCall = HTTPRequestTask()
+            httpRequestCall.execute()
         }
     }
 
@@ -52,7 +55,6 @@ class LoginActivity : AppCompatActivity() {
 
     private fun navigateToReciterActivity() {
         val intent = Intent(this, RegisterActivity::class.java)
-        this.finish()
         startActivity(intent)
     }
 }
