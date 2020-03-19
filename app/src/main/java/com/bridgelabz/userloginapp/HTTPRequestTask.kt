@@ -18,7 +18,7 @@ class HTTPRequestTask : AsyncTask<Void, Void, Void>() {
         //GET
         try {
             val url =
-                URL("http://fundoonotes.incubation.bridgelabz.com/api/user/5e71aee0ad53b700227c5905?access_token=faUiQVguZu67f4ChfyOVOpfCUNr4lF8jeBTyZjGeNsOGRb8N32KD97QjB1IMXLhL")
+                URL("http://fundoonotes.incubation.bridgelabz.com/api/user")
             urlConnection = url.openConnection() as HttpURLConnection
 //            urlConnection!!.addRequestProperty("id", "5e71aee0ad53b700227c5905")
             val responseCode = urlConnection!!.responseCode
@@ -41,6 +41,7 @@ class HTTPRequestTask : AsyncTask<Void, Void, Void>() {
                 urlConnection!!.disconnect()
         }
 
+        // logIn
         //POST
         try {
 
@@ -49,7 +50,7 @@ class HTTPRequestTask : AsyncTask<Void, Void, Void>() {
             postData.addProperty("password", "sound7")
 
             val url =
-                URL("http://fundoonotes.incubation.bridgelabz.com/api/user/login?access_token=rDC8Uhh0TL5fbEhu12pRe1Gxr30r4NutroMsDmuMEyPOhp8wu3cEmbQeAKqyNCCb")
+                URL("http://fundoonotes.incubation.bridgelabz.com/api/user/login")
             urlConnection = url.openConnection() as HttpURLConnection
             urlConnection!!.setRequestProperty("Content-Type", "application/json")
             urlConnection!!.requestMethod = "POST"
